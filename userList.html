@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 80%;
+    align-content: center;
+    alignment-baseline: central;
+    text-align: center;
+}
+th, td {
+    padding: 5px;
+}
+th{
+	font-weight: bold;
+	font-style: italic;
+	color: blue;
+}
+button{
+	margin-left: 130px;
+	margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div class="">
+	<h1 align="center">User-List</h1>
+	<div id="table" align="center" class="table-responsive">
+
+	</div>
+	
+	
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$.ajax({
+		url:'/getUsers',
+		method: 'GET'
+	})
+	.success(function(data) {
+		console.log(data);
+		if(data.length===0) {
+			document.getElementById("table").innerHTML="NO Users ARE AVAILABLE IN OUR DATABASE CURRENTLY.";
+		}
+		else {
+			var html = "<table class>	\
+							<tr>\
+								<th>UserName</th>\
+								<th>Name</th>\
+								<th>Email</th>\
+								<th>contact</th>\
+								<th>Unique_Id</th>\
+							</tr>"
+
+			for(var i = 0; i < data.length; i++) {
+				var temp = data[i];
+				console.log(temp);
+				html += "<tr><td>"+ temp.username+"</td><td>"+ temp.name+"</td><td>"+temp.email+"</td><td>"+temp.contact+"</td><td>"+temp.Unique_Id+"</td></tr>";
+			}
+
+			html += "</table>";
+
+			document.getElementById("table").innerHTML = html;
+		}
+	})
+	.fail(function() {
+
+	});
+
+	
+</script>
+</body>
+</html>
