@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 80%;
+    align-content: center;
+    alignment-baseline: central;
+    text-align: center;
+}
+th, td {
+    padding: 5px;
+}
+th{
+	font-weight: bold;
+	font-style: italic;
+	color: blue;
+}
+button{
+	margin-left: 130px;
+	margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div class="">
+	<h1 align="center">Book-List</h1>
+	<div id="table" align="center" class="table-responsive">
+
+	</div>
+	<div>
+		<button class="btn btn-blue" type="submit" data-toggle="modal" data-target="#myModal">Add New</button>
+		<!-- Modal -->
+		<form action="/booklist" method="POST">
+		  <div class="modal fade" id="myModal" role="dialog">
+			    <div class="modal-dialog">
+			    
+			      <!-- Modal content-->
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			          <h4 class="modal-title">Add Book Details</h4>
+			        </div>
+			        <div class="modal-body">
+			         <form>
+						  <div class="form-group">
+						    <label for="exampleInputEmail1">Author</label>
+						    <input type="text" class="form-control" id="author" name="author1" placeholder="EAuthor-Name">
+						  </div>
+						  <div class="form-group">
+						    <label for="exampleInputPassword1">Name</label>
+						    <input type="text" class="form-control" id="name" name="name1" placeholder="Name">
+						  </div>
+						  <div class="form-group">
+						     <label for="exampleInputPassword1">Availability</label>
+						    <input type="text" class="form-control" id="isAvail" name="isAvail1" placeholder="Yes/No">
+						  </div>
+	  					</form>
+			        </div>
+			        <div class="modal-footer">
+			          <button type="submit" class="btn btn-default">Submit</button>
+			          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			      
+			    </div>
+		  </div>
+		 
+  		</form>
+	</div>
+	<div>
+		<!-- Modal -->
+		<form action="/assignBookToUser" method="POST">
+		  <div class="modal fade" id="myModal1" role="dialog">
+			    <div class="modal-dialog">
+			    
+			      <!-- Modal content-->
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			          <h4 class="modal-title">Add User Details</h4>
+			        </div>
+			        <div class="modal-body">
+			         <form>
+						  <div class="form-group">
+							    <label for="exampleInputEmail1">Username</label>
+							    <input type="text" class="form-control" id="author" name="Username1" placeholder="UserName">
+						  </div>
+						  <div class="form-group">
+							    <label for="exampleInputPassword1">Name</label>
+							    <input type="text" class="form-control" id="name" name="name1" placeholder="Name">
+						  </div>
+						  <div class="form-group">
+						    	<label for="exampleInputPassword1">Email</label>
+						    	<input type="email" class="form-control" id="email" name="email1" placeholder="abc@xyz">
+						  </div>
+						  <div class="form-group">
+						     	<label for="exampleInputPassword1">Contact</label>
+						    	<input type="text" class="form-control" id="phone" name="contact" placeholder="797495979457">
+						  </div>
+						  <input type="hidden" name="Unique_Id" id="object_id" value="">
+	  					</form>
+			        </div>
+			        <div class="modal-footer">
+			          <button type="submit" class="btn btn-default">Submit</button>
+			          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			      
+			    </div>
+		  </div>
+		 
+  		</form>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$.ajax({
+		url:'/getbooks',
+		method: 'GET'
+	})
+	.success(function(data) {
+		console.log(data);
+		if(data.length===0) {
+			document.getElementById("table").innerHTML="NO BOOKS ARE AVAILABLE IN OUR DATABASE CURRENTLY.";
+		}
+		else {
+			var html = "<table class>	\
+							<tr>\
+								<th>Author</th>\
+								<th>Name</th>\
+								<th>Availability</th>\
+								<th>Submit</th>\
+							</tr>"
+
+			for(var i = 0; i < data.length; i++) {
+				var temp = data[i];
+				var isAvail = temp.availability;
+				console.log(isAvail);
+				if(isAvail==='yes'){
+				html += "<tr><td>"+ temp.author+"</td><td>"+ temp.name+"</td><td>"+temp.availability+"</td><td>"+"<input type='button' name='get_me' value='Get_Book' id='clickme' class='btn btn-default' data-toggle='modal' data-target='#myModal1' onclick='openModal();'/>"+"<input type='hidden' name='Unique_Id' id='objectId' value='"+temp._id+"'/>"+"<input type='hidden' name='available' id='isAvailable' value='"+temp.availability+"'/>"+"</td></tr>";
+				}else if(isAvail==="no"){
+					html += "<tr><td>"+ temp.author+"</td><td>"+ temp.name+"</td><td>"+temp.availability+"</td><td>"+"<input type='button' name='get_me' value='Get_Book' id='clickme' class='btn btn-default' data-toggle='modal' data-target='#myModal1' onclick='openModal();' disabled='true'/>"+"<input type='hidden' name='Unique_Id' id='objectId' value='"+temp._id+"'/>"+"<input type='hidden' name='available' id='isAvailable' value='"+temp.availability+"'/>"+"</td></tr>";
+				}
+			}
+
+			html += "</table>";
+
+			document.getElementById("table").innerHTML = html;
+		}
+	})
+	.fail(function() {
+
+	});
+
+	function openModal(){
+		var id = document.getElementById("objectId").value;
+		//var isAvail = document.getElementById("isAvailable").value;
+		console.log(id);
+		$("#object_id")[0].value = id;
+	}
+</script>
+</body>
+</html>
